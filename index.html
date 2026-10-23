@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuánto cobrar | Calculadora de tarifas para freelancers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#D9E0E8;--bg2:#CBD4DF;--card:#E7ECF2;--ink:#131A2E;--mut:#56617A;--line:#B9C4D3;--acc:#3446D6;--on:#F4F6FF;--c1:#3446D6;--c2:#13806A;--c3:#C4483F;--c4:#8A6A1F;--sh:0 24px 60px -28px rgba(19,26,46,.45);--ok:#13806A;--err:#C4483F;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0F1F;--bg2:#0F1428;--card:#141A33;--ink:#EEF1FF;--mut:#9AA3C4;--line:#262E52;--acc:#8EA3FF;--on:#0B1030;--c1:#8EA3FF;--c2:#5EE0B8;--c3:#FF8A7A;--c4:#F2C46D;--sh:0 28px 70px -30px rgba(0,0,0,.8);--ok:#5EE0B8;--err:#FF8A7A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B0F1F;--bg2:#0F1428;--card:#141A33;--ink:#EEF1FF;--mut:#9AA3C4;--line:#262E52;--acc:#8EA3FF;--on:#0B1030;--c1:#8EA3FF;--c2:#5EE0B8;--c3:#FF8A7A;--c4:#F2C46D;--sh:0 28px 70px -30px rgba(0,0,0,.8);--ok:#5EE0B8;--err:#FF8A7A;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:500 16px/1.55 Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .5s,color .5s;overflow-x:hidden}
+.orb{position:fixed;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none;z-index:0;background:radial-gradient(circle,var(--c1),transparent 65%);animation:drift 22s ease-in-out infinite alternate}
+.orb.b{right:-15vmax;bottom:-18vmax;background:radial-gradient(circle,var(--c2),transparent 65%);animation-duration:28s;opacity:.22}
+.orb.a{left:-18vmax;top:-20vmax}
+@keyframes drift{to{transform:translate(6vmax,4vmax) scale(1.12)}}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:22px 18px 48px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+.brand{font:400 28px/1 "Instrument Serif",Georgia,serif;letter-spacing:.2px;display:flex;align-items:center;gap:10px}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 0 var(--acc);animation:pulse 2.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.tools{display:flex;gap:8px}
+select,.ib{height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px Manrope,system-ui,sans-serif;padding:0 12px;cursor:pointer;transition:transform .2s,border-color .2s}
+select:hover,.ib:hover{border-color:var(--acc);transform:translateY(-1px)}
+.ib{width:42px;padding:0;display:grid;place-items:center}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .5s}
+.ib:active svg{transform:rotate(90deg) scale(.85)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:10px}
+.stepper{display:flex;align-items:center;gap:0;margin-bottom:10px}
+.st{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--mut);flex:0 0 auto;transition:color .4s}
+.st b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-size:13px;transition:all .4s}
+.st.on{color:var(--ink)}.st.on b{border-color:var(--acc);background:var(--acc);color:var(--on);transform:scale(1.08)}
+.st.done b{border-color:var(--acc);color:var(--acc)}
+.ln{flex:1;height:2px;background:var(--line);margin:0 8px;border-radius:2px;overflow:hidden;min-width:8px}
+.ln i{display:block;height:100%;width:0;background:var(--acc);transition:width .6s cubic-bezier(.3,.8,.3,1)}
+@media(max-width:560px){.st span{display:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:30px 28px;box-shadow:var(--sh);margin-top:18px;transition:background .5s,border-color .5s;overflow:hidden}
+@media(max-width:560px){.card{padding:24px 18px;border-radius:22px}}
+.step{animation:inR .5s cubic-bezier(.2,.8,.2,1)}.step.l{animation-name:inL}
+@keyframes inR{from{opacity:0;transform:translateX(34px)}}
+@keyframes inL{from{opacity:0;transform:translateX(-34px)}}
+h1,h2{font:400 clamp(30px,6vw,42px)/1.1 "Instrument Serif",Georgia,serif;margin:0 0 8px;letter-spacing:.1px}
+.sub{color:var(--mut);margin:0 0 24px;max-width:56ch}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.f label,.sl label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.f small,.sl small{display:block;color:var(--mut);font-size:12.5px;margin-top:5px;font-weight:500}
+.mi{position:relative}
+.mi span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut);font-weight:600;font-size:14px;pointer-events:none}
+.mi input{width:100%;height:50px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg2);color:var(--ink);font:600 17px Manrope,system-ui,sans-serif;padding:0 14px 0 54px;transition:border-color .25s,box-shadow .25s,background .5s}
+.mi input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 22%,transparent)}
+.tot{margin-top:20px;padding:16px 18px;border-radius:16px;background:var(--bg2);display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tot b{font:400 30px/1 "Instrument Serif",Georgia,serif}
+.sl{margin-bottom:22px}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sh output{font:400 26px/1 "Instrument Serif",Georgia,serif;color:var(--acc);min-width:3ch;text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:8px;margin:10px 0 0;cursor:pointer;background:linear-gradient(90deg,var(--acc) var(--p,50%),var(--line) var(--p,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--acc);border:4px solid var(--card);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .2s}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--acc);border:4px solid var(--card)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
+.err{color:var(--err);font-weight:600;font-size:14px;min-height:22px;margin-top:14px}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.btn{height:50px;padding:0 26px;border-radius:14px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:700 15px Manrope,system-ui,sans-serif;cursor:pointer;transition:transform .2s,box-shadow .3s,border-color .2s,background .2s}
+.btn:hover{transform:translateY(-2px);border-color:var(--acc)}
+.btn:active{transform:scale(.97)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:var(--on);box-shadow:0 10px 26px -10px var(--acc)}
+.btn.p:hover{box-shadow:0 14px 30px -8px var(--acc)}
+.link{background:none;border:0;color:var(--acc);font:700 14px Manrope,system-ui,sans-serif;cursor:pointer;padding:6px 0}
+.link:hover{text-decoration:underline}
+.hero{text-align:center;padding:8px 0 22px}
+.hero .big{font:400 clamp(54px,14vw,96px)/1 "Instrument Serif",Georgia,serif;color:var(--acc);margin:6px 0}
+.hero p{margin:0;color:var(--mut)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
+@media(max-width:560px){.three{grid-template-columns:1fr}}
+.kp{background:var(--bg2);border-radius:18px;padding:16px 18px;transition:transform .3s}
+.kp:hover{transform:translateY(-3px)}
+.kp small{color:var(--mut);font-weight:600;font-size:13px}
+.kp b{display:block;font:400 28px/1.2 "Instrument Serif",Georgia,serif;margin-top:2px;overflow-wrap:anywhere}
+.sec{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.sec h3{font:400 26px/1.15 "Instrument Serif",Georgia,serif;margin:0 0 4px}
+.sec>p{color:var(--mut);margin:0 0 18px;font-size:14.5px}
+.dn{display:flex;gap:26px;align-items:center;flex-wrap:wrap;justify-content:center}
+.ring{position:relative;width:230px;height:230px;flex:0 0 auto}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4.2;transition:stroke-dasharray 1s cubic-bezier(.3,.8,.3,1),stroke-dashoffset 1s cubic-bezier(.3,.8,.3,1)}
+.ring .tr{stroke:var(--bg2)}
+.ctr{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:0 40px}
+.ctr small{color:var(--mut);font-weight:600;font-size:12.5px}
+.ctr b{font:400 24px/1.2 "Instrument Serif",Georgia,serif;overflow-wrap:anywhere}
+.lg{list-style:none;margin:0;padding:0;flex:1;min-width:220px;display:grid;gap:10px}
+.lg li{display:flex;align-items:center;gap:10px;font-size:14.5px}
+.lg li i{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
+.lg li em{margin-left:auto;font-style:normal;font-weight:700;text-align:right}
+.lg li s{text-decoration:none;color:var(--mut);font-weight:600;font-size:13px;min-width:44px;text-align:right}
+.sc{display:grid;gap:10px}
+.sr{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:var(--bg2);transition:transform .25s,background .25s;flex-wrap:wrap}
+.sr:hover{transform:translateX(4px)}
+.sr span{font-weight:600;font-size:14.5px}
+.sr b{font-weight:700;font-size:15px}
+.dl{font-size:13px;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:8px}
+.dl.up{background:color-mix(in srgb,var(--c3) 20%,transparent);color:var(--c3)}
+.dl.dw{background:color-mix(in srgb,var(--c2) 20%,transparent);color:var(--c2)}
+.cmp{display:grid;gap:14px}
+.bar{background:var(--bg2);border-radius:14px;padding:14px 16px}
+.bar div{display:flex;justify-content:space-between;gap:10px;font-weight:600;font-size:14.5px;margin-bottom:9px;flex-wrap:wrap}
+.bar u{display:block;height:10px;border-radius:10px;background:var(--line);overflow:hidden;text-decoration:none}
+.bar u i{display:block;height:100%;width:0;border-radius:10px;transition:width 1s cubic-bezier(.3,.8,.3,1)}
+.acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:14px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.2,.8,.2,1);z-index:9;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.note{color:var(--mut);font-size:12.5px;text-align:center;margin:22px auto 0;max-width:60ch}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div class="wrap">
+  <header>
+    <div class="brand"><i></i>Cuánto cobrar</div>
+    <div class="tools">
+      <select id="cur" aria-label="Moneda">
+        <option value="ARS">ARS $</option><option value="USD">USD US$</option><option value="EUR">EUR €</option>
+        <option value="MXN">MXN $</option><option value="COP">COP $</option><option value="CLP">CLP $</option>
+        <option value="BRL">BRL R$</option><option value="UYU">UYU $U</option><option value="GBP">GBP £</option>
+      </select>
+      <button class="ib" id="th" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro u oscuro">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </header>
+  <nav class="stepper" id="stp" aria-label="Progreso"></nav>
+  <main class="card" id="app" aria-live="polite"></main>
+  <p class="note">Es una estimación orientativa. Los impuestos y cargas cambian según tu país y tu régimen, así que ajusta el porcentaje a tu caso y consúltalo con tu contador.</p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)};
+var CURS=['ARS','USD','EUR','MXN','COP','CLP','BRL','UYU','GBP'];
+var SCALE={USD:1,EUR:.9,GBP:.8,ARS:1400,MXN:18,COP:4000,CLP:950,BRL:5.5,UYU:40};
+var STEPS=['Gastos','Tiempo','Objetivo','Resultado'];
+var EXP=[['viv','Vivienda','Alquiler o hipoteca, expensas'],['com','Comida y transporte','Supermercado, movilidad, salidas'],['ser','Servicios y suscripciones','Internet, luz, software, herramientas'],['sal','Salud y seguros','Cobertura médica, seguros'],['otr','Otros gastos','Estudios, ocio, imprevistos']];
+var S={cur:'ARS',exp:{viv:0,com:0,ser:0,sal:0,otr:0},hours:35,vac:4,bill:70,save:0,tax:20,margin:10,ph:40,step:0,dir:1};
+var store=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+var app=$('#app'),stp=$('#stp'),cur=$('#cur');
+
+/* tema */
+function theme(t){document.documentElement.setAttribute('data-theme',t);store('cc-theme',t)}
+var t0=store('cc-theme');
+if(!t0){t0=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark'}
+document.documentElement.setAttribute('data-theme',t0);
+$('#th').onclick=function(){theme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')};
+
+/* moneda */
+var c0=store('cc-cur');if(c0&&CURS.indexOf(c0)>-1)S.cur=c0;cur.value=S.cur;
+cur.onchange=function(){S.cur=cur.value;store('cc-cur',S.cur);if(S.step===3)update(true);else render(0)};
+function fmt(n,d){n=n||0;var dec=d!==undefined?d:(Math.abs(n)<100?2:0);return new Intl.NumberFormat('es-AR',{style:'currency',currency:S.cur,minimumFractionDigits:dec,maximumFractionDigits:dec}).format(n)}
+function sym(){var p=new Intl.NumberFormat('es-AR',{style:'currency',currency:S.cur,maximumFractionDigits:0}).formatToParts(0);for(var i=0;i<p.length;i++)if(p[i].type==='currency')return p[i].value;return S.cur}
+function num(n){return n?n.toLocaleString('es-AR'):''}
+
+/* cálculo */
+function calc(p){
+  var E=0,k;for(k in p.exp)E+=p.exp[k];
+  var base=(E+p.save)/(1-p.tax/100),tax=base*p.tax/100,buf=base*p.margin/100,gross=base+buf;
+  var hm=p.hours*(52-p.vac)/12*p.bill/100,hourly=hm>0?gross/hm:0,dh=p.hours*p.bill/100/5;
+  return{E:E,save:p.save,tax:tax,buf:buf,gross:gross,hm:hm,hourly:hourly,daily:hourly*dh}
+}
+function withP(o){var q=JSON.parse(JSON.stringify(S));for(var k in o)q[k]=o[k];return q}
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+
+/* vistas */
+function slider(k,label,min,max,step,hint,unit){
+  return '<div class="sl"><div class="sh"><label for="s-'+k+'">'+label+'</label><output id="o-'+k+'">'+S[k]+unit+'</output></div><input type="range" id="s-'+k+'" data-k="'+k+'" data-u="'+unit+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+S[k]+'">'+(hint?'<small>'+hint+'</small>':'')+'</div>'
+}
+function v0(){
+  var h='<h1>¿Cuánto gastas al mes?</h1><p class="sub">Suma lo que necesitas para vivir y trabajar. Empieza por lo que sepas, puedes ajustarlo después.</p><div class="grid">';
+  EXP.forEach(function(e){h+='<div class="f"><label for="e-'+e[0]+'">'+e[1]+'</label><div class="mi"><span>'+sym()+'</span><input id="e-'+e[0]+'" data-e="'+e[0]+'" inputmode="numeric" autocomplete="off" placeholder="0" value="'+num(S.exp[e[0]])+'"><small>'+e[2]+'</small></div></div>'});
+  return h+'</div><div class="tot"><span>Total de gastos mensuales</span><b id="tot">'+fmt(calc(S).E,0)+'</b></div><div class="err" id="err"></div><div class="nav"><button class="link" id="ex">Cargar un ejemplo</button><button class="btn p" data-go="1">Continuar</button></div>'
+}
+function v1(){
+  return '<h1>¿Cuánto tiempo trabajas?</h1><p class="sub">No todas las horas se facturan: también hay reuniones, administración y búsqueda de clientes.</p>'
+  +slider('hours','Horas de trabajo por semana',10,60,1,'Incluye todo el tiempo que le dedicas al trabajo.',' h')
+  +slider('vac','Semanas sin trabajar al año',0,12,1,'Vacaciones, feriados y días de descanso.',' sem')
+  +slider('bill','Porcentaje de horas facturables',30,100,5,'La mayoría de freelancers factura entre un 60 % y un 75 %.',' %')
+  +'<div class="nav"><button class="btn" data-go="0">Atrás</button><button class="btn p" data-go="2">Continuar</button></div>'
+}
+function v2(){
+  return '<h1>¿Cuánto quieres que te quede?</h1><p class="sub">Define cuánto quieres ahorrar o ganar por encima de tus gastos, y qué parte se va en impuestos.</p>'
+  +'<div class="f" style="margin-bottom:24px"><label for="e-save">Ahorro o ganancia mensual deseada</label><div class="mi"><span>'+sym()+'</span><input id="e-save" data-e="save" inputmode="numeric" autocomplete="off" placeholder="0" value="'+num(S.save)+'"><small>Es el dinero que queda para ti después de cubrir tus gastos.</small></div></div>'
+  +slider('tax','Impuestos y cargas',0,50,1,'Porcentaje de tu facturación que se va en impuestos.',' %')
+  +slider('margin','Colchón de seguridad',0,30,1,'Un margen para meses flojos y clientes que pagan tarde.',' %')
+  +'<div class="nav"><button class="btn" data-go="1">Atrás</button><button class="btn p" data-go="3">Ver mi tarifa</button></div>'
+}
+function v3(){
+  return '<div class="hero"><p>Tu tarifa mínima por hora</p><div class="big" id="r-h">0</div><p id="r-m"></p></div>'
+  +'<div class="three"><div class="kp"><small>Por día</small><b id="r-d">0</b></div><div class="kp"><small>Facturación mensual</small><b id="r-g">0</b></div><div class="kp"><small>Horas facturables al mes</small><b id="r-hm">0</b></div></div>'
+  +'<div class="sec" style="margin-top:0;border:0;padding-top:0"><h3>Ajusta y mira el resultado al instante</h3><p>Mueve los controles y tu tarifa se actualiza.</p>'+slider('hours','Horas por semana',10,60,1,'',' h')+slider('vac','Semanas sin trabajar',0,12,1,'',' sem')+slider('margin','Colchón de seguridad',0,30,1,'',' %')+'</div>'
+  +'<div class="sec"><h3>A dónde va cada '+'moneda que cobras</h3><p>Así se reparte tu facturación mensual.</p><div class="dn"><div class="ring"><svg viewBox="0 0 36 36" id="ring"><circle class="tr" cx="18" cy="18" r="15.9155"/></svg><div class="ctr"><small>Facturación mensual</small><b id="r-g2"></b></div></div><ul class="lg" id="lg"></ul></div></div>'
+  +'<div class="sec"><h3>¿Y si cambias algo?</h3><p>Así se mueve tu tarifa por hora en cada escenario.</p><div class="sc" id="sc"></div></div>'
+  +'<div class="sec"><h3>Por hora o por proyecto</h3><p>Indica cuántas horas calculas para un trabajo y compara las dos formas de cobrarlo.</p><div class="sl"><div class="sh"><label for="s-ph">Horas estimadas del proyecto</label><output id="o-ph">'+S.ph+' h</output></div><input type="range" id="s-ph" data-k="ph" data-u=" h" min="5" max="300" step="5" value="'+S.ph+'"></div><div class="cmp" id="cmp"></div></div>'
+  +'<div class="acts"><button class="btn p" id="cp">Copiar resumen</button><button class="btn" data-go="0">Editar mis datos</button><button class="btn" id="rs">Empezar de nuevo</button></div>'
+}
+var VIEWS=[v0,v1,v2,v3];
+
+/* render */
+function render(dir){
+  S.dir=dir||S.dir;
+  stp.innerHTML=STEPS.map(function(n,i){return '<div class="st '+(i===S.step?'on':i<S.step?'done':'')+'"><b>'+(i<S.step?'✓':i+1)+'</b><span>'+n+'</span></div>'+(i<3?'<div class="ln"><i style="width:'+(i<S.step?100:0)+'%"></i></div>':'')}).join('');
+  app.innerHTML='<div class="step'+(S.dir<0?' l':'')+'">'+VIEWS[S.step]()+'</div>';
+  app.querySelectorAll('input[type=range]').forEach(fill);
+  if(S.step===3)setTimeout(function(){update(true)},40);
+  var f=app.querySelector('input:not([type=range])');if(f&&S.step!==3&&matchMedia('(hover:hover)').matches)f.focus({preventScroll:true});
+  if(window.scrollY>140)window.scrollTo({top:0,behavior:'smooth'})
+}
+function fill(el){el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%')}
+
+/* animación de números */
+function count(el,to,f,ms){
+  if(!el)return;var from=el._v||0;el._v=to;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||from===to){el.textContent=f(to);return}
+  var t0=performance.now();ms=ms||700;cancelAnimationFrame(el._r);
+  (function tick(t){var p=clamp((t-t0)/ms,0,1),e=1-Math.pow(1-p,3);el.textContent=f(from+(to-from)*e);if(p<1)el._r=requestAnimationFrame(tick)})(t0)
+}
+
+/* actualizar resultado */
+function update(first){
+  if(S.step!==3)return;var r=calc(S);
+  count($('#r-h'),r.hourly,function(v){return fmt(v)},first?1100:450);
+  count($('#r-d'),r.daily,function(v){return fmt(v,0)});
+  count($('#r-g'),r.gross,function(v){return fmt(v,0)});
+  count($('#r-g2'),r.gross,function(v){return fmt(v,0)});
+  count($('#r-hm'),r.hm,function(v){return v.toFixed(0)+' h'});
+  $('#r-m').textContent='Para llegar a '+fmt(r.gross,0)+' al mes trabajando '+r.hm.toFixed(0)+' horas facturables.';
+  /* anillo */
+  var seg=[['Gastos',r.E,'--c1'],['Ahorro o ganancia',r.save,'--c2'],['Impuestos',r.tax,'--c3'],['Colchón de seguridad',r.buf,'--c4']],svg=$('#ring'),acc=0,lg='';
+  seg.forEach(function(s,i){
+    var p=r.gross>0?s[1]/r.gross*100:0,c=svg.querySelector('.s'+i);
+    if(!c){c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('class','s'+i);c.setAttribute('cx',18);c.setAttribute('cy',18);c.setAttribute('r',15.9155);c.setAttribute('stroke-dasharray','0 100');c.setAttribute('stroke-dashoffset',25);svg.appendChild(c)}
+    c.style.stroke='var('+s[2]+')';
+    var gap=p>2?.6:0;
+    c.setAttribute('stroke-dasharray',Math.max(p-gap,0)+' '+(100-Math.max(p-gap,0)));
+    c.setAttribute('stroke-dashoffset',25-acc);acc+=p;
+    lg+='<li><i style="background:var('+s[2]+')"></i>'+s[0]+'<em>'+fmt(s[1],0)+'</em><s>'+p.toFixed(0)+' %</s></li>'
+  });
+  $('#lg').innerHTML=lg;
+  /* escenarios */
+  var base=r.hourly,sc=[
+    ['Trabajar 5 horas menos por semana',{hours:clamp(S.hours-5,10,60)},S.hours-5>=10],
+    ['Trabajar 5 horas más por semana',{hours:clamp(S.hours+5,10,60)},S.hours+5<=60],
+    ['Tomarte 2 semanas más de descanso',{vac:clamp(S.vac+2,0,12)},S.vac+2<=12],
+    ['Facturar un 10 % más de tu tiempo',{bill:clamp(S.bill+10,30,100)},S.bill+10<=100],
+    ['Sin colchón de seguridad',{margin:0},S.margin>0]
+  ].filter(function(x){return x[2]}),h='';
+  sc.forEach(function(x){var v=calc(withP(x[1])).hourly,d=base>0?(v-base)/base*100:0;
+    h+='<div class="sr"><span>'+x[0]+'</span><div><b>'+fmt(v)+'</b><span class="dl '+(d>0?'up':'dw')+'">'+(d>0?'+':'')+d.toFixed(0)+' %</span></div></div>'});
+  $('#sc').innerHTML=h;
+  /* comparador */
+  var byH=r.hourly*S.ph,closed=byH*1.2,mx=Math.max(byH,closed)||1;
+  $('#cmp').innerHTML='<div class="bar"><div><span>Por hora: '+S.ph+' h × '+fmt(r.hourly)+'</span><b>'+fmt(byH,0)+'</b></div><u><i id="b1" style="background:var(--c1)"></i></u></div><div class="bar"><div><span>Precio cerrado, con 20 % extra por imprevistos</span><b>'+fmt(closed,0)+'</b></div><u><i id="b2" style="background:var(--c2)"></i></u></div>';
+  setTimeout(function(){var a=$('#b1'),b=$('#b2');if(a){a.style.width=(byH/mx*100)+'%';b.style.width=(closed/mx*100)+'%'}},30)
+}
+
+/* eventos */
+app.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset.e){var n=parseInt(t.value.replace(/\D/g,''),10)||0;t.value=num(n);if(t.dataset.e==='save')S.save=n;else S.exp[t.dataset.e]=n;var tot=$('#tot');if(tot)tot.textContent=fmt(calc(S).E,0);var er=$('#err');if(er)er.textContent=''}
+  else if(t.dataset.k){S[t.dataset.k]=+t.value;fill(t);var o=$('#o-'+t.dataset.k);if(o)o.textContent=t.value+t.dataset.u;
+    if(S.step===3){var twin=app.querySelectorAll('[data-k="'+t.dataset.k+'"]');update()}}
+});
+app.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.dataset.e){e.preventDefault();var b=app.querySelector('.btn.p');if(b)b.click()}});
+app.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.go!==undefined){var to=+b.dataset.go;
+    if(S.step===0&&to>0&&calc(S).E<=0){var er=$('#err');er.textContent='Ingresa al menos un gasto para poder calcular tu tarifa.';er.classList.remove('shake');void er.offsetWidth;er.classList.add('shake');var f=app.querySelector('input');if(f)f.focus();return}
+    var dir=to>S.step?1:-1;S.step=to;render(dir)}
+  else if(b.id==='ex'){var k=SCALE[S.cur],v=[600,400,90,70,150],ks=['viv','com','ser','sal','otr'];ks.forEach(function(x,i){S.exp[x]=Math.round(v[i]*k/(k>=100?1000:10))*(k>=100?1000:10)||Math.round(v[i]*k)});S.save=Math.round(400*k/(k>=100?1000:10))*(k>=100?1000:10)||Math.round(400*k);render(1);toast('Cargamos un ejemplo. Cámbialo por tus números.')}
+  else if(b.id==='cp')copy();
+  else if(b.id==='rs'){var c=S.cur;S={cur:c,exp:{viv:0,com:0,ser:0,sal:0,otr:0},hours:35,vac:4,bill:70,save:0,tax:20,margin:10,ph:40,step:0,dir:-1};render(-1);toast('Empezamos de nuevo.')}
+});
+
+/* copiar */
+function copy(){
+  var r=calc(S),tx='Mi tarifa freelance ('+S.cur+')\n\nPor hora: '+fmt(r.hourly)+'\nPor día: '+fmt(r.daily,0)+'\nFacturación mensual: '+fmt(r.gross,0)+'\n\nBase del cálculo\nGastos mensuales: '+fmt(r.E,0)+'\nAhorro o ganancia: '+fmt(r.save,0)+'\nImpuestos ('+S.tax+' %): '+fmt(r.tax,0)+'\nColchón ('+S.margin+' %): '+fmt(r.buf,0)+'\nHoras facturables al mes: '+r.hm.toFixed(0)+' ('+S.hours+' h por semana, '+S.vac+' semanas de descanso, '+S.bill+' % facturable)\n\nProyecto de '+S.ph+' h: '+fmt(r.hourly*S.ph,0)+' por hora o '+fmt(r.hourly*S.ph*1.2,0)+' a precio cerrado.';
+  var ok=function(){toast('Resumen copiado')},ko=function(){
+    var a=document.createElement('textarea');a.value=tx;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();
+    try{document.execCommand('copy')?ok():toast('No se pudo copiar. Selecciona y copia el texto a mano.')}catch(e){toast('No se pudo copiar. Selecciona y copia el texto a mano.')}document.body.removeChild(a)};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(ok,ko);else ko()
+}
+var tt;function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2400)}
+render(1);
+})();
+</script>
+</body>
+</html>
